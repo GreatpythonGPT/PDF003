@@ -6,7 +6,7 @@ export default defineConfig({
   root: path.resolve(__dirname, 'src'),
   build: {
     outDir: path.resolve(__dirname, 'dist'),
-    emptyOutDir: true
+    emptyOutDir: false
   },
   plugins: [react()],
   resolve: {

@@ -4,7 +4,7 @@
   "description": "Rendering image PDF generator",
   "main": "dist/electron/main.js",
   "scripts": {
-    "start": "npm run build && electron .",
+    "start": "npm run build && electron --no-sandbox .",
     "build": "tsc -p . && vite build",
     "dev": "concurrently -k \"tsc -w -p .\" \"vite\" \"wait-on dist/index.html && electron .\""
   },
@@ -27,6 +27,7 @@
     "concurrently": "^8.2.0",
     "typescript": "^5.4.2",
     "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "wait-on": "^7.0.1"
   }
 }

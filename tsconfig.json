@@ -7,7 +7,9 @@
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "types": ["node"]
   },
   "include": ["electron/**/*.ts", "src/**/*.ts", "src/**/*.tsx"]
 }
