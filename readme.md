@@ -1,3 +1,21 @@
+# 渲染图演示 PDF 生成器
+
+This project packages an Electron desktop application for generating presentation
+PDFs from batches of renderings. The app uses Electron 36.x together with React
+and Material UI.
+
+## 开发
+
+```bash
+npm install
+npm run dev
+```
+
+The development server launches both Vite and Electron. Ensure Node.js 18 or
+newer is installed.
+
+The original specification follows.
+
 1. 产品定位
 
 目标用户：室内 / 工业 / 产品设计师及渲染师。
@@ -108,7 +126,7 @@ Segoe UI / Arial / 思源黑体
 
 React + TypeScript + Material UI + Framer Motion
 
-Electron 28+
+Electron 36.x
 
 pdf-lib / jsPDF + HTML Canvas
 
