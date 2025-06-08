@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>渲染图演示 PDF 生成器</title>
+<meta http-equiv="Content-Security-Policy" content="script-src 'self' https://unpkg.com;" />
+<style>
+body {font-family: Arial, sans-serif; margin:0; padding:0;}
+#sidebar {width:200px; background:#f2f2f2; height:100vh; float:left; box-sizing:border-box; padding:10px;}
+#content {margin-left:200px; padding:10px;}
+.thumbnail {width:150px; height:150px; object-fit:cover; margin:5px; cursor:pointer; border:1px solid #ccc;}
+.selected {border:3px solid #007bff;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="renderer.js"></script>
+</body>
+</html>
