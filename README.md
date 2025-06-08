@@ -104,7 +104,7 @@ Delete：删除
 
 7. 技术栈
 
-React + TypeScript + Framer Motion
+React + Electron
 
 本地是node.js版本22.16
 
