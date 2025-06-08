@@ -106,6 +106,8 @@ Delete：删除
 
 React + TypeScript + Framer Motion
 
+本地是node.js版本22.16
+
 Electron（最新稳定版）
 
 本地存储最近使用参数
