@@ -40,11 +40,11 @@ function ImageManager({images,setImages,selected,setSelected}) {
     setSelected([]);
   };
 
-  return e('div', null,
-    e('button',{onClick:addImages},'增加图片'),
-    e('button',{onClick:()=>{const ids=images.map(img=>img.id);setSel(ids);setSelected(ids);}},'全选'),
-    e('button',{onClick:()=>{setSel([]);setSelected([]);}},'清空选择'),
-    e('button',{onClick:deleteSelected},'删除所选'),
+  return e('div', {className:'card'},
+    e('button',{onClick:addImages, className:'btn'},'增加图片'),
+    e('button',{onClick:()=>{const ids=images.map(img=>img.id);setSel(ids);setSelected(ids);}, className:'btn'},'全选'),
+    e('button',{onClick:()=>{setSel([]);setSelected([]);}, className:'btn'},'清空选择'),
+    e('button',{onClick:deleteSelected, className:'btn'},'删除所选'),
     e('div',{id:'content', style:{display:'flex',flexWrap:'wrap'}},
       images.map(img=>e('img',{
         key:img.id,
@@ -72,23 +72,30 @@ function Settings({settings,setSettings,generate}) {
     if (d) setSettings(JSON.parse(d));
   };
 
-  return e('div', { id: 'content' },
-    e('div', null,
+  return e('div', { id: 'content', className:'card' },
+    e('div', {style:{marginBottom:'10px'}},
       e('label', null, '输出宽度'),
       e('input', { type: 'number', name: 'width', value: settings.width, onChange: handleChange })
     ),
-    e('div', null,
+    e('div', {style:{marginBottom:'10px'}},
       e('label', null, '标题文本'),
       e('input', { type: 'text', name: 'title', value: settings.title, onChange: handleChange })
     ),
-    e('div', null,
+    e('div', {style:{marginBottom:'10px'}},
+      e('label', null, '标题字体'),
+      e('input', {
+        type: 'file', accept: '.ttf,.otf',
+        onChange: e => setSettings(s => ({ ...s, titleFontPath: e.target.files[0]?.path || '' }))
+      })
+    ),
+    e('div', {style:{marginBottom:'10px'}},
       e('label', null, '水印PNG'),
       e('input', {
         type: 'file', accept: 'image/png',
         onChange: e => setSettings(s => ({ ...s, watermarkPath: e.target.files[0]?.path || '' }))
       })
     ),
-    e('div', null,
+    e('div', {style:{marginBottom:'10px'}},
       e('label', null, '位置'),
       e('select', { name: 'wmPos', value: settings.wmPos, onChange: handleChange },
         e('option', { value: 'lt' }, '左上'),
@@ -97,15 +104,15 @@ function Settings({settings,setSettings,generate}) {
         e('option', { value: 'rb' }, '右下')
       )
     ),
-    e('div', null,
+    e('div', {style:{marginBottom:'10px'}},
       e('label', null, '水平边距'),
       e('input', { type: 'number', name: 'wmMarginX', value: settings.wmMarginX, onChange: handleChange })
     ),
-    e('div', null,
+    e('div', {style:{marginBottom:'10px'}},
       e('label', null, '垂直边距'),
       e('input', { type: 'number', name: 'wmMarginY', value: settings.wmMarginY, onChange: handleChange })
     ),
-    e('div', null,
+    e('div', {style:{marginBottom:'10px'}},
       e('label', null, '水印缩放'),
       e('select', { name: 'wmScale', value: settings.wmScale, onChange: handleChange },
         e('option', { value: '0.25' }, '25%'),
@@ -114,17 +121,13 @@ function Settings({settings,setSettings,generate}) {
         e('option', { value: '1' }, '100%')
       )
     ),
-    e('div', null,
+    e('div', {style:{marginBottom:'10px'}},
       e('label', null, '标题页高度'),
       e('input', { type: 'number', name: 'titleHeight', value: settings.titleHeight, onChange: handleChange })
     ),
-    e('div', null,
-      e('label', null, '标题颜色'),
-      e('input', { type: 'color', name: 'titleColor', value: settings.titleColor, onChange: handleChange })
-    ),
-    e('button', { onClick: save }, '保存配置'),
-    e('button', { onClick: load }, '读取配置'),
-    e('button', { onClick: generate }, '生成PDF')
+    e('button', { onClick: save, className:'btn' }, '保存配置'),
+    e('button', { onClick: load, className:'btn' }, '读取配置'),
+    e('button', { onClick: generate, className:'btn' }, '生成PDF')
   );
 }
 
@@ -136,7 +139,7 @@ function App(){
     width:1080,
     title:'标题',
     titleHeight:500,
-    titleColor:'#000000',
+    titleFontPath:'',
     watermarkPath:'',
     wmPos:'rb',
     wmMarginX:0,
@@ -149,28 +152,23 @@ function App(){
     const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
     const fs = require('fs');
     const doc = await PDFDocument.create();
-    const font = await doc.embedFont(StandardFonts.Helvetica);
-
-    const hexToRgb = (hex) => {
-      const m = hex.match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
-      if (!m) return { r: 0, g: 0, b: 0 };
-      return {
-        r: parseInt(m[1], 16) / 255,
-        g: parseInt(m[2], 16) / 255,
-        b: parseInt(m[3], 16) / 255
-      };
-    };
+    let font;
+    if (settings.titleFontPath) {
+      const fBytes = fs.readFileSync(settings.titleFontPath);
+      font = await doc.embedFont(fBytes);
+    } else {
+      font = await doc.embedFont(StandardFonts.Helvetica);
+    }
 
     if (settings.title) {
       const page = doc.addPage([settings.width, parseInt(settings.titleHeight)]);
-      const { r, g, b } = hexToRgb(settings.titleColor);
       const textWidth = font.widthOfTextAtSize(settings.title, 24);
       page.drawText(settings.title, {
         x: (settings.width - textWidth) / 2,
         y: settings.titleHeight / 2,
         size: 24,
         font,
-        color: rgb(r, g, b)
+        color: rgb(0, 0, 0)
       });
     }
 
